@@ -1,7 +1,7 @@
 ## Care Management Application
 
 [![CircleCI](https://circleci.com/gh/sauloaguiar/medical-application-spa.svg?style=svg)](https://circleci.com/gh/sauloaguiar/medical-application-spa)
-[![Test Coverage](https://codeclimate.com/github/codeclimate/codeclimate/badges/coverage.svg)](https://codeclimate.com/github/sauloaguiar/medical-application-spa/coverage)
+[![Test Coverage](https://codeclimate.com/github/codeclimate/codeclimate/badges/coverage.svg)](https://codeclimate.com/github/sauloaguiar/medical-application-spa/)
 
 This project hosts the front end for [Medical Application](https://github.com/sauloaguiar/medical-application).
 
