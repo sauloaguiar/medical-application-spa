@@ -1,20 +1,30 @@
 import React from 'react';
-import { Route, Link } from 'react-router-dom'
-import Home from './home'
-import About from './about'
+import { BrowserRouter, Route, Link, Redirect, Switch } from 'react-router-dom';
+
+const login = () => <span>Login</span>;
+const patients = () => <span>Patients</span>;
+const patient = props => {
+  console.log(props);
+  return <span>Patient</span>;
+};
 
 const App = () => (
-  <div>
-    <header>
-      <Link to="/">Home</Link>
-      <Link to="/about-us">About</Link>
-    </header>
-
-    <main>
-      <Route exact path="/" component={Home} />
-      <Route exact path="/about-us" component={About} />
-    </main>
-  </div>
+  <BrowserRouter>
+    <div>
+      <header>
+        <Link to="/patients">Home</Link>
+        <Link to="/logout">Logout</Link>
+      </header>
+      <main>
+        <Switch>
+          <Route exact path="/patients/:id" component={patient} />
+          <Route exact path="/patients" component={patients} />
+          <Route path="/login" component={login} />
+          <Redirect from="/" to="/patients/" />
+        </Switch>
+      </main>
+    </div>
+  </BrowserRouter>
 );
 
 export default App;
