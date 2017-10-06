@@ -1,7 +1,6 @@
 import { render, unmountComponentAtNode } from 'react-dom';
 import React from 'react';
-import { Route, Link, MemoryRouter } from 'react-router-dom';
-import { Simulate } from 'react-dom/test-utils';
+import { Route, MemoryRouter } from 'react-router-dom';
 
 // a way to render any part of your app inside a MemoryRouter
 // you pass it a list of steps to execute when the location
