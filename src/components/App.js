@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter, Route, Link, Redirect, Switch } from 'react-router-dom';
+import PatientList from './PatientList';
 
 const login = () => <span>Login</span>;
-const patients = () => <span>Patients</span>;
 const patient = props => {
   console.log(props);
   return <span>Patient</span>;
@@ -18,7 +18,7 @@ const App = () => (
       <main>
         <Switch>
           <Route exact path="/patients/:id" component={patient} />
-          <Route exact path="/patients" component={patients} />
+          <Route exact path="/patients" component={PatientList} />
           <Route path="/login" component={login} />
           <Redirect from="/" to="/patients/" />
         </Switch>
