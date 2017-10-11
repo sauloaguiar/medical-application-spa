@@ -3,29 +3,17 @@ import List, { ListItem } from 'material-ui/List';
 import ActionInfo from 'material-ui/svg-icons/action/info';
 import FileFolder from 'material-ui/svg-icons/file/folder';
 import Avatar from 'material-ui/Avatar';
+import { connect } from 'react-redux';
+import { loadUserById } from '../actions/patients';
 
 class PatientList extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      patients: [
-        {
-          name: 'Patient #1',
-          birthday: '10/10/2010',
-          id: 1
-        },
-        {
-          name: 'Patient #2',
-          birthday: '10/10/2010',
-          id: 2
-        }
-      ]
-    };
+  componentWillMount() {
+    const { loadUserById } = this.props;
+    loadUserById(1);
   }
 
   render() {
-    const { patients } = this.state;
+    const { patients } = this.props;
     return (
       <div>
         <h1 style={{ textAlign: 'center' }}>Patients</h1>
@@ -33,7 +21,7 @@ class PatientList extends React.Component {
           {patients.map(patient => (
             <ListItem
               key={patient.id}
-              primaryText={patient.name}
+              primaryText={`${patient.firstName} ${patient.lastName}`}
               secondaryText={patient.birthday}
               leftAvatar={<Avatar icon={<FileFolder />} />}
               rightIcon={<ActionInfo />}
@@ -45,4 +33,16 @@ class PatientList extends React.Component {
   }
 }
 
-export default PatientList;
+const mapStateToProps = state => {
+  return {
+    patients: state.patients.patients
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    loadUserById: id => dispatch(loadUserById(id))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PatientList);
