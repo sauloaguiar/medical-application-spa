@@ -5,6 +5,7 @@ import patientsReducer from './patients';
 export default combineReducers({
   routing: routerReducer,
   patients: patientsReducer
+  // user: userReducer
 });
 
 // user

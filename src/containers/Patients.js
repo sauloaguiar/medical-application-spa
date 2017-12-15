@@ -4,16 +4,18 @@ import ActionInfo from 'material-ui/svg-icons/action/info';
 import FileFolder from 'material-ui/svg-icons/file/folder';
 import Avatar from 'material-ui/Avatar';
 import { connect } from 'react-redux';
-import { loadUserById } from '../actions/patients';
+import { loadPatientsByCaregiverId } from '../actions/patients';
+import { withRouter } from 'react-router-dom';
 
-class PatientList extends React.Component {
+class Patients extends React.Component {
   componentWillMount() {
     const { loadUserById } = this.props;
     loadUserById(1);
   }
 
   render() {
-    const { patients } = this.props;
+    const { patients, history } = this.props;
+
     return (
       <div>
         <h1 style={{ textAlign: 'center' }}>Patients</h1>
@@ -25,6 +27,7 @@ class PatientList extends React.Component {
               secondaryText={patient.birthday}
               leftAvatar={<Avatar icon={<FileFolder />} />}
               rightIcon={<ActionInfo />}
+              onClick={() => history.push(`/patients/${patient.id}`)}
             />
           ))}
         </List>
@@ -41,8 +44,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    loadUserById: id => dispatch(loadUserById(id))
+    loadUserById: id => dispatch(loadPatientsByCaregiverId(id))
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PatientList);
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(Patients)
+);
