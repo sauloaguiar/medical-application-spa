@@ -1,6 +1,6 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import {
-  PATIENTS_BY_ID_REQUESTED,
+  PATIENTS_BY_CAREGIVER_ID_REQUESTED,
   patientsLoadedSucceeded,
   patientsLoadedFailed
 } from '../actions/patients';
@@ -23,5 +23,5 @@ function* fetchPatients(action) {
 }
 
 export default function* watchPatientRequest() {
-  yield takeLatest(PATIENTS_BY_ID_REQUESTED, fetchPatients);
+  yield takeLatest(PATIENTS_BY_CAREGIVER_ID_REQUESTED, fetchPatients);
 }
