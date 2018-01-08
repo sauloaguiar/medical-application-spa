@@ -1,20 +1,18 @@
+import ReactDOM from 'react-dom';
 import React from 'react';
-import { render } from 'react-dom';
-import './style/index.css';
-import App from './components/App';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import registerServiceWorker from './registerServiceWorker';
+import { makeMainRoutes } from './routes';
 import { Provider } from 'react-redux';
 import store from './store';
-import registerServiceWorker from './registerServiceWorker';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-const root = document.querySelector('#root');
+const routes = makeMainRoutes();
 
-render(
+ReactDOM.render(
   <Provider store={store}>
-    <MuiThemeProvider>
-      <App />
-    </MuiThemeProvider>
+    <MuiThemeProvider>{routes}</MuiThemeProvider>
   </Provider>,
-  root
+  document.querySelector('#root')
 );
+
 registerServiceWorker();
