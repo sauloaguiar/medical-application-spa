@@ -4,20 +4,20 @@ import rootReducer from './reducers';
 import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
-import patientSaga from './saga/patients';
+import indexSaga from './saga/index';
 
 const initialState = {};
 
 // create the saga middleware
 const sagaMiddleware = createSagaMiddleware();
 
-const middleware = [thunk, logger, sagaMiddleware];
+const middleware = [thunk, sagaMiddleware, logger];
 
 const composedEnhancers = composeWithDevTools(applyMiddleware(...middleware));
 
 const store = createStore(rootReducer, initialState, composedEnhancers);
 
 // then run the saga
-sagaMiddleware.run(patientSaga);
+sagaMiddleware.run(indexSaga);
 
 export default store;

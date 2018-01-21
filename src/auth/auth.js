@@ -26,9 +26,16 @@ export default class Auth {
 
   login() {
     this.auth0.authorize();
+
+    // fire the action
+
+    // saga login would pick up
+
+    // call auth.login();
   }
 
   handleAuthentication() {
+    // await parseHash((err, authResult) => { }
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
@@ -54,7 +61,7 @@ export default class Auth {
     localStorage.setItem('scopes', JSON.stringify(scopes));
 
     // navigate to the home route
-    history.replace('/home');
+    // history.replace('/home');
   }
 
   userHasScopes(scopes) {
