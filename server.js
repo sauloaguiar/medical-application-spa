@@ -11,6 +11,10 @@ dotenv.config()
 if (!process.env.AUTH0_DOMAIN || !process.env.AUTH0_AUDIENCE) {
   throw 'Make sure you have AUTH0_DOMAIN, and AUTH0_AUDIENCE in your .env file'
 }
+const corsOptions = {
+  origin: 'http://example.com',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
 
 app.use(cors());
 app.use(morgan('API Request (port 3001): :method :url :status :response-time ms - :res[content-length]'));
