@@ -23,6 +23,5 @@ function* fetchPatients(action) {
 }
 
 export default function* watchPatientRequest() {
-  console.log('patients');
   yield takeLatest(PATIENTS_BY_CAREGIVER_ID_REQUESTED, fetchPatients);
 }
