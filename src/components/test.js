@@ -1,9 +1,30 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Navbar, Button } from 'react-bootstrap';
 
 class Test extends Component {
+  isAuthenticated = () => {
+    return false;
+  };
+
+  userHasScopes = scopes => {
+    return true;
+  };
+
   render() {
-    return <div onClick={this.props.test}>Some Button</div>;
+    return (
+      <div>
+        {!this.isAuthenticated() && (
+          <Button
+            bsStyle="primary"
+            className="btn-margin"
+            onClick={this.props.test}
+          >
+            Log In
+          </Button>
+        )}
+      </div>
+    );
   }
 }
 
