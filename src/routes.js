@@ -14,6 +14,7 @@ import Patients from './containers/Patients';
 import Schedule from './containers/Schedule';
 import { connect } from 'react-redux';
 import { verifyLogin } from './actions/auth';
+
 const auth = new Auth();
 
 const handleAuthentication = (nextState, replace) => {
@@ -24,6 +25,7 @@ const handleAuthentication = (nextState, replace) => {
 
 class Routes extends React.Component {
   render() {
+    const { isLogged } = this.props;
     return (
       <Router history={history}>
         <div>
@@ -36,7 +38,7 @@ class Routes extends React.Component {
             exact
             path="/patients/:id"
             render={props =>
-              !auth.isAuthenticated() ? (
+              !isLogged ? (
                 <Redirect to="/home" />
               ) : (
                 <Schedule auth={auth} {...props} />
@@ -46,7 +48,7 @@ class Routes extends React.Component {
             exact
             path="/patients"
             render={props =>
-              !auth.isAuthenticated() ? (
+              !isLogged ? (
                 <Redirect to="/home" />
               ) : (
                 <Patients auth={auth} {...props} />
@@ -56,7 +58,7 @@ class Routes extends React.Component {
           <Route
             path="/profile"
             render={props =>
-              !auth.isAuthenticated() ? (
+              !isLogged ? (
                 <Redirect to="/home" />
               ) : (
                 <Profile auth={auth} {...props} />
@@ -65,7 +67,7 @@ class Routes extends React.Component {
           <Route
             path="/ping"
             render={props =>
-              !auth.isAuthenticated() ? (
+              !isLogged ? (
                 <Redirect to="/home" />
               ) : (
                 <Ping auth={auth} {...props} />
@@ -75,15 +77,13 @@ class Routes extends React.Component {
             path="/callback"
             render={props => {
               this.props.verifyLogin(props);
-              // handleAuthentication(props);
-              return <Callback {...props} />;
+              return <Callback isLogged={this.props.isLogged} />;
             }}
           />
           <Route
             path="/admin"
             render={props =>
-              !auth.isAuthenticated() ||
-              !auth.userHasScopes(['write:messages']) ? (
+              !isLogged || !auth.userHasScopes(['write:messages']) ? (
                 <Redirect to="/home" />
               ) : (
                 <Admin auth={auth} {...props} />
@@ -95,10 +95,16 @@ class Routes extends React.Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    isLogged: state.auth.accessToken && Date.now() < state.auth.expiresAt
+  };
+};
+
 const mapDispatchToProps = dispatch => {
   return {
     verifyLogin: props => dispatch(verifyLogin(props))
   };
 };
 
-export default connect(null, mapDispatchToProps)(Routes);
+export default connect(mapStateToProps, mapDispatchToProps)(Routes);
