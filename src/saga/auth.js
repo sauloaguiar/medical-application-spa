@@ -16,8 +16,6 @@ import {
 import auth0 from 'auth0-js';
 import { eventChannel, END } from 'redux-saga';
 
-//https://github.com/benawad/redux-saga-and-react-router-v4-example/tree/master/src/routes/Login
-
 const requestedScopes = 'openid profile read:messages write:messages';
 
 const auth = new auth0.WebAuth({
@@ -30,7 +28,7 @@ const auth = new auth0.WebAuth({
 });
 
 function* loginAuth0(action) {
-  yield auth.authorize();
+  yield call(auth.authorize.bind(auth));
 }
 
 function parseHash() {
@@ -46,7 +44,7 @@ function parseHash() {
         emitter(END);
       }
     });
-    return () => undefined;
+    return () => console.log('ended');
   });
 }
 

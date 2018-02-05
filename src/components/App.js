@@ -4,18 +4,8 @@ import { connect } from 'react-redux';
 import { loginAction } from '../actions/auth';
 
 class App extends Component {
-  goTo = route => {
-    this.props.history.replace(`/${route}`);
-  };
-  isAuthenticated = () => {
-    return false;
-  };
-
-  userHasScopes = scopes => {
-    return true;
-  };
-
   render() {
+    const { history } = this.props;
     return (
       <div>
         <Navbar fluid>
@@ -26,21 +16,22 @@ class App extends Component {
             <Button
               bsStyle="primary"
               className="btn-margin"
-              onClick={this.goTo.bind(this, 'home')}
+              onClick={() => history.push('home')}
             >
               Home
             </Button>
-            {this.isAuthenticated() &&
-              this.userHasScopes(['write:messages']) && (
-                <Button
-                  bsStyle="primary"
-                  className="btn-margin"
-                  onClick={this.goTo.bind(this, 'admin')}
-                >
-                  Admin
-                </Button>
-              )}
-            {!this.isAuthenticated() && (
+            {this.props.isAuthenticated && (
+              // this.userHasScopes(['write:messages']) && (
+              <Button
+                bsStyle="primary"
+                className="btn-margin"
+                onClick={() => history.push('admin')}
+              >
+                Admin
+              </Button>
+            )}
+            {/* )} */}
+            {!this.props.isAuthenticated && (
               <Button
                 bsStyle="primary"
                 className="btn-margin"
@@ -49,39 +40,35 @@ class App extends Component {
                 Log In
               </Button>
             )}
-            {this.isAuthenticated() && (
+            {this.props.isAuthenticated && (
               <Button
                 bsStyle="primary"
                 className="btn-margin"
-                onClick={this.goTo.bind(this, 'profile')}
+                onClick={() => history.push('profile')}
               >
                 Profile
               </Button>
             )}
-            {this.isAuthenticated() && (
+            {this.props.isAuthenticated && (
               <Button
                 bsStyle="primary"
                 className="btn-margin"
-                onClick={this.goTo.bind(this, 'patients')}
+                onClick={() => history.push('patients')}
               >
                 Patients
               </Button>
             )}
-            {this.isAuthenticated() && (
+            {this.props.isAuthenticated && (
               <Button
                 bsStyle="primary"
                 className="btn-margin"
-                onClick={this.goTo.bind(this, 'ping')}
+                onClick={() => history.push('ping')}
               >
                 Ping
               </Button>
             )}
-            {this.isAuthenticated() && (
-              <Button
-                bsStyle="primary"
-                className="btn-margin"
-                onClick={this.logout.bind(this)}
-              >
+            {this.props.isAuthenticated && (
+              <Button bsStyle="primary" className="btn-margin">
                 Log Out
               </Button>
             )}
@@ -92,10 +79,16 @@ class App extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    isAuthenticated: state.auth.accessToken && Date.now() < state.auth.expiresAt
+  };
+};
+
 const mapDispatchToProps = dispatch => {
   return {
     login: () => dispatch(loginAction())
   };
 };
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
