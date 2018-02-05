@@ -22,12 +22,12 @@ class Ping extends Component {
       .catch(error => this.setState({ message: error.message }));
   }
   render() {
-    const { isAuthenticated } = this.props.auth;
-    const { message } = this.state;
+    // const { isAuthenticated } = this.props.auth;
+    // const { message } = this.state;
     return (
       <div className="container">
         <h1>Make a Call to the Server</h1>
-        {!isAuthenticated() && (
+        {/* {!isAuthenticated() && (
           <p>Log in to call a private (secured) server endpoint.</p>
         )}
         <Button bsStyle="primary" onClick={this.ping.bind(this)}>
@@ -38,7 +38,7 @@ class Ping extends Component {
             Call Private
           </Button>
         )}
-        <h2>{message}</h2>
+        <h2>{message}</h2> */}
       </div>
     );
   }
