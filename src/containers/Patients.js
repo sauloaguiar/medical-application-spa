@@ -5,10 +5,9 @@ import FileFolder from 'material-ui/svg-icons/file/folder';
 import Avatar from 'material-ui/Avatar';
 import { connect } from 'react-redux';
 import { loadPatientsByCaregiverId } from '../actions/patients';
-import { withRouter } from 'react-router-dom';
 
 class Patients extends React.Component {
-  componentWillMount() {
+  componentDidMount() {
     const { loadUserById } = this.props;
     loadUserById(1);
   }
@@ -48,6 +47,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(Patients)
-);
+export default connect(mapStateToProps, mapDispatchToProps)(Patients);

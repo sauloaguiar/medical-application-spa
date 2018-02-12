@@ -10,8 +10,7 @@ import {
   LOGIN_START,
   LOGIN_VERIFICATION,
   loginSucceeded,
-  loginFailed,
-  LOGIN_SUCCEEDED
+  loginFailed
 } from '../actions/auth';
 import auth0 from 'auth0-js';
 import { eventChannel, END } from 'redux-saga';

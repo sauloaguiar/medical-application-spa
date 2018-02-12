@@ -1,4 +1,4 @@
-import { LOGIN_START, LOGIN_SUCCEEDED, LOGIN_FAILED } from '../actions/auth';
+import { LOGIN_SUCCEEDED, LOGOUT } from '../actions/auth';
 
 const initialState = {
   accessToken: null,
@@ -18,6 +18,10 @@ export default (state = initialState, action) => {
         expiresAt: payload.expiresIn * 1000 + new Date().getTime(),
         scopes: payload.scope || initialState.scopes
       };
+
+    case LOGOUT:
+      return initialState;
+
     default:
       return state;
   }

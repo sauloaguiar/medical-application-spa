@@ -29,7 +29,7 @@ class Schedule extends React.Component {
 const mapStateToProps = (state, ownProps) => {
   const schedule = state.patients.patients.loaded
     ? state.patients.patients.filter(
-        patient => patient.id == ownProps.match.params.id
+        patient => patient.id === ownProps.match.params.id
       )[0].prescriptions
     : [];
   return {
