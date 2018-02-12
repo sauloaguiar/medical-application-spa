@@ -1,74 +1,62 @@
 import React, { Component } from 'react';
 import { Navbar, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { loginAction } from '../actions/auth';
+import { login, logout } from '../actions/auth';
+import { Link } from 'react-router-dom';
 
 class App extends Component {
   render() {
-    const { history } = this.props;
     return (
       <div>
         <Navbar fluid>
           <Navbar.Header>
             <Navbar.Brand>
-              <a href="#">Auth0 - React</a>
+              <a>Auth0 - React</a>
             </Navbar.Brand>
-            <Button
-              bsStyle="primary"
-              className="btn-margin"
-              onClick={() => history.push('home')}
-            >
-              Home
-            </Button>
+            <Link to={`/home`}>
+              <Button bsStyle="primary" className="btn-margin">
+                Home
+              </Button>
+            </Link>
+
             {this.props.isAuthenticated && (
               // this.userHasScopes(['write:messages']) && (
-              <Button
-                bsStyle="primary"
-                className="btn-margin"
-                onClick={() => history.push('admin')}
-              >
-                Admin
-              </Button>
+              <Link to={`/admin`}>
+                <Button bsStyle="primary" className="btn-margin">
+                  Admin
+                </Button>
+              </Link>
             )}
             {/* )} */}
             {!this.props.isAuthenticated && (
               <Button
                 bsStyle="primary"
                 className="btn-margin"
-                onClick={this.props.login}
+                onClick={this.props.loginAction}
               >
                 Log In
               </Button>
             )}
             {this.props.isAuthenticated && (
-              <Button
-                bsStyle="primary"
-                className="btn-margin"
-                onClick={() => history.push('profile')}
-              >
-                Profile
-              </Button>
+              <Link to={`/profile`}>
+                <Button bsStyle="primary" className="btn-margin">
+                  Profile
+                </Button>
+              </Link>
+            )}
+            {this.props.isAuthenticated && (
+              <Link to={`/patients`}>
+                <Button bsStyle="primary" className="btn-margin">
+                  Patients
+                </Button>
+              </Link>
             )}
             {this.props.isAuthenticated && (
               <Button
                 bsStyle="primary"
                 className="btn-margin"
-                onClick={() => history.push('patients')}
+                onClick={this.props.logoutAction}
               >
-                Patients
-              </Button>
-            )}
-            {this.props.isAuthenticated && (
-              <Button
-                bsStyle="primary"
-                className="btn-margin"
-                onClick={() => history.push('ping')}
-              >
-                Ping
-              </Button>
-            )}
-            {this.props.isAuthenticated && (
-              <Button bsStyle="primary" className="btn-margin">
                 Log Out
               </Button>
             )}
@@ -87,7 +75,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    login: () => dispatch(loginAction())
+    loginAction: () => dispatch(login()),
+    logoutAction: () => dispatch(logout())
   };
 };
 
