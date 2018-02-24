@@ -60,7 +60,7 @@ function* loginVerification(action) {
     yield put(loginFailed(data));
   } else {
     yield put(loginSucceeded(data));
-    yield fork(renewToken(data));
+    // yield fork(renewToken(data));
   }
 }
 
@@ -113,6 +113,7 @@ function* watchLogout() {
 }
 
 function* authSaga() {
-  yield all([watchLoginRequest(), watchLoginVerification(), watchLogout()]);
+  // yield all([watchLoginRequest(), watchLoginVerification(), watchLogout()]);
+  yield all([watchLoginRequest(), watchLoginVerification()]);
 }
 export default authSaga;
