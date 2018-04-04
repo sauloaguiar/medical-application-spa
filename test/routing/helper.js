@@ -7,7 +7,7 @@ import { Route, MemoryRouter } from 'react-router-dom';
 // changes, it will call back to you with stuff like
 // `match` and `location`, and `history` so you can control
 // the flow and make assertions.
-export const renderTestSequence = ({
+/*export const renderTestSequence = ({
   initialEntries,
   initialIndex,
   subject: Subject,
@@ -58,4 +58,4 @@ export const renderTestSequence = ({
   }
 
   render(<Test />, div);
-};
+};*/

@@ -1,4 +1,4 @@
-import App from '../../components/App';
+import App from '../../src/components/App';
 import { renderTestSequence } from './helper.js';
 
 it('navigates around', done => {

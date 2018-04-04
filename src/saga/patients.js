@@ -13,7 +13,7 @@ function makeHttp(id) {
   return request(RESOURCE_URL);
 }
 
-function* fetchPatients(action) {
+export function* fetchPatients(action, makeHttp) {
   try {
     const patients = yield call(makeHttp, action.payload);
     yield put(patientsLoadedSucceeded(patients));
@@ -23,5 +23,5 @@ function* fetchPatients(action) {
 }
 
 export default function* watchPatientRequest() {
-  yield takeLatest(PATIENTS_BY_CAREGIVER_ID_REQUESTED, fetchPatients);
+  yield takeLatest(PATIENTS_BY_CAREGIVER_ID_REQUESTED, fetchPatients, makeHttp);
 }
