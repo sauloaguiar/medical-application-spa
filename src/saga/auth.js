@@ -15,7 +15,7 @@ import {
 } from '../actions/auth';
 
 import { fork } from 'redux-saga/effects';
-import { login, validateSession, auth } from '../service/oAuthService';
+import { login, validateSession } from '../service/oAuthService';
 
 function* loginAuth0() {
   yield call(login);
@@ -23,8 +23,8 @@ function* loginAuth0() {
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-export function* loginVerification(auth) {
-  const data = yield call(validateSession, auth);
+export function* loginVerification(validateSession) {
+  const data = yield call(validateSession);
   if (data && !data.accessToken) {
     yield put(loginFailed(data));
   } else {
@@ -41,7 +41,7 @@ function* watchLoginRequest() {
 }
 
 function* watchLoginVerification() {
-  yield takeEvery(LOGIN_VERIFICATION, loginVerification, auth);
+  yield takeEvery(LOGIN_VERIFICATION, loginVerification, validateSession);
 }
 
 function* watchLogout() {

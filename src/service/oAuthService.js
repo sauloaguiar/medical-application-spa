@@ -15,7 +15,7 @@ export const login = () => {
   auth.authorize();
 };
 
-export const validateSession = auth => {
+export const validateSession = () => {
   return new Promise((resolve, reject) => {
     auth.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
