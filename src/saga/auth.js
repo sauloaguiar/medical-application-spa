@@ -15,55 +15,22 @@ import {
 } from '../actions/auth';
 
 import { fork } from 'redux-saga/effects';
-import { login, validateSession } from '../service/oAuthService';
+import { login, validateSession, auth } from '../service/oAuthService';
 
-function* loginAuth0(action) {
+function* loginAuth0() {
   yield call(login);
 }
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-function* loginVerification(action) {
-  const data = yield call(validateSession);
+export function* loginVerification(auth) {
+  const data = yield call(validateSession, auth);
   if (data && !data.accessToken) {
     yield put(loginFailed(data));
   } else {
     yield put(loginSucceeded(data));
-    // yield fork(renewToken(data));
   }
 }
-
-// function checkSession() {
-//   return eventChannel(emitter => {
-//     auth.checkSession({}, (err, result) => {
-//       if (err) {
-//         console.log('renew failed: ', err);
-//         emitter({});
-//         emitter(END);
-//       } else {
-//         console.log('renew ok: ');
-//         emitter(result);
-//         emitter(END);
-//       }
-//     });
-//     return () => console.log('checkSession ended');
-//   });
-// }
-// function* renewToken(data) {
-//   // https://github.com/Chiara-yen/redux-saga-timer-example/blob/master/app/sagas/index.js
-//   const expiresAt = JSON.parse(data.getItem('expires_at'));
-//   const waitTime = expiresAt - Date.now();
-//   yield call(delay, waitTime);
-
-//   const channel = yield call(checkSession);
-//   const channelData = yield take(channel);
-//   channel.close();
-//   if (channelData && !channelData.accessToken) {
-//     yield put(loginFailed(channelData));
-//   } else {
-//     yield put(loginSucceeded(channelData));
-//   }
-// }
 
 function* logout() {
   // clear the timer when the user has logged out
@@ -74,7 +41,7 @@ function* watchLoginRequest() {
 }
 
 function* watchLoginVerification() {
-  yield takeEvery(LOGIN_VERIFICATION, loginVerification);
+  yield takeEvery(LOGIN_VERIFICATION, loginVerification, auth);
 }
 
 function* watchLogout() {

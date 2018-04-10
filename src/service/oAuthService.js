@@ -2,7 +2,7 @@ import auth0 from 'auth0-js';
 
 const requestedScopes = 'openid profile read:messages write:messages';
 
-const auth = new auth0.WebAuth({
+export const auth = new auth0.WebAuth({
   domain: 'medicare.auth0.com',
   clientID: 'HmDhcgMMNHsCPthPf6feQUWjF5KFSd6x',
   redirectUri: 'http://localhost:3000/callback',
@@ -15,13 +15,15 @@ export const login = () => {
   auth.authorize();
 };
 
-export const validateSession = () => {
+export const validateSession = auth => {
   return new Promise((resolve, reject) => {
     auth.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         resolve(authResult);
       } else {
-        reject(err);
+        if (!err) {
+          reject(err);
+        }
       }
     });
   });

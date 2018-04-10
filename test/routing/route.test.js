@@ -1,7 +1,7 @@
 import App from '../../src/components/App';
 import { renderTestSequence } from './helper.js';
 
-it('navigates around', done => {
+xit('navigates around', done => {
   renderTestSequence({
     subject: App,
 

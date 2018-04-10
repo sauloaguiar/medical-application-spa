@@ -1,15 +1,46 @@
 import { loginVerification } from '../../src/saga/auth';
-import { call } from  'redux-saga/effects';
+import { call, put } from  'redux-saga/effects';
+import { validateSession } from '../../src/service/oAuthService';
 import { assert } from 'chai';
+import { LOGIN_SUCCEEDED, LOGIN_FAILED } from '../../src/actions/auth';
+import { cloneableGenerator } from 'redux-saga/utils';
 
-describe('auth saga tests', () => {
-  it('successfully logs in', (done) => {
-    const gen = loginVerification();
+describe('auth saga', () => {
+  describe('loginVerification()', () => {
+    const auth = {
+      parseHash: () => { }
+    };
+    const generator = cloneableGenerator(loginVerification)(auth);
+    it('should return call validateSession', () => {
+      const v = generator.next().value;
+      console.log(v);
+      assert.deepEqual(
+        v,
+        call(validateSession, auth)
+      );
+    });
+    
+    it('should call put loginSucceeded', () => {
+      const clone = generator.clone();
+      assert.deepEqual(
+        clone.next().value,
+        put({
+          type: LOGIN_SUCCEEDED,
+          payload: undefined
+        })
+      );
+    });
 
-    assert.deepEqual(
-      gen.next().value,
-      { channel: 1 },
-      'asserts channel'
-    );
-  });  
+    it('should call put loginFail', () => {
+      const clone = generator.clone();
+      assert.deepEqual(
+        clone.next().value,
+        put({
+          type: LOGIN_FAILED,
+          payload: undefined
+        })
+      );
+    });
+  });
+  
 })
