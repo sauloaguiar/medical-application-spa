@@ -13,9 +13,9 @@ function makeHttp(id) {
   return request(RESOURCE_URL);
 }
 
-export function* fetchPatients(makeHttp) {
+export function* fetchPatients(makeHttp, action) {
   try {
-    const patients = yield call(makeHttp);
+    const patients = yield call(makeHttp, action.payload);
     yield put(patientsLoadedSucceeded(patients));
   } catch (error) {
     yield put(patientsLoadedFailed(error));

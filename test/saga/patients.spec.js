@@ -10,8 +10,8 @@ describe('patient saga tests', () => {
         id: 1
       }
     }
-    const fun = () => {};
-    const gen = fetchPatients(action, fun);
+    const fun = () => ( action.payload );
+    const gen = fetchPatients(fun, action);
     const patients = {patients: [{name: 'name', id: 1}]};
 
     assert.deepEqual(gen.next().value, call(fun, action.payload), "result should be equal");
