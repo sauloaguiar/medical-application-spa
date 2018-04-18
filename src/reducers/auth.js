@@ -7,6 +7,8 @@ const initialState = {
   scopes: null
 };
 
+// redux persits?
+// redux middleware
 export default (state = initialState, action) => {
   const { payload } = action;
   switch (action.type) {

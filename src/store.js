@@ -6,7 +6,11 @@ import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
 import indexSaga from './saga/index';
 
-const initialState = {};
+const initialState = {
+  auth: localStorage.getItem('auth')
+    ? JSON.parse(localStorage.getItem('auth'))
+    : {}
+};
 
 // create the saga middleware
 const sagaMiddleware = createSagaMiddleware();

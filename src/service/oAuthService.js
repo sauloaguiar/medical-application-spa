@@ -28,3 +28,15 @@ export const validateSession = () => {
     });
   });
 };
+
+export const renewToken = () => {
+  return new Promise((resolve, reject) => {
+    auth.checkSession({}, function(err, result) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+};
