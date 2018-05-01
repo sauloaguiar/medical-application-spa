@@ -6,12 +6,6 @@ import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
 import indexSaga from './saga/index';
 
-const initialState = {
-  auth: localStorage.getItem('auth')
-    ? JSON.parse(localStorage.getItem('auth'))
-    : {}
-};
-
 // create the saga middleware
 const sagaMiddleware = createSagaMiddleware();
 
@@ -19,7 +13,7 @@ const middleware = [thunk, sagaMiddleware, logger];
 
 const composedEnhancers = composeWithDevTools(applyMiddleware(...middleware));
 
-const store = createStore(rootReducer, initialState, composedEnhancers);
+const store = createStore(rootReducer, {}, composedEnhancers);
 
 // then run the saga
 sagaMiddleware.run(indexSaga);

@@ -3,8 +3,13 @@ import { Navbar, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { login, logout } from '../actions/auth';
 import { Link } from 'react-router-dom';
+import { startupAction } from '../actions/startup';
 
 class App extends Component {
+  componentDidMount() {
+    this.props.startupAction();
+  }
+
   render() {
     return (
       <div>
@@ -76,7 +81,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     loginAction: () => dispatch(login()),
-    logoutAction: () => dispatch(logout())
+    logoutAction: () => dispatch(logout()),
+    startupAction: () => dispatch(startupAction())
   };
 };
 

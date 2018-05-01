@@ -1,10 +1,17 @@
-import { loginVerification, scheduleTokenRenew, processTokenRenew } from '../../src/saga/auth';
-import { call, put, select, fork } from  'redux-saga/effects';
+import {
+  loginVerification,
+  scheduleTokenRenew,
+  processTokenRenew,
+  logoutUser,
+  storeTokenLocalStorage,
+  watchStartup,
+  checkAccessGranted
+} from '../../src/saga/auth';
+import { call, put, fork } from  'redux-saga/effects';
 import { delay } from 'redux-saga';
 import { assert } from 'chai';
 import { LOGIN_SUCCEEDED, LOGIN_FAILED } from '../../src/actions/auth';
-import { cloneableGenerator } from 'redux-saga/utils';
-import { getAuth } from '../../src/selectors/auth';
+import { cloneableGenerator, fromGenerator } from 'redux-saga/utils';
 import { renewToken } from '../../src/service/oAuthService';
 
 describe('auth saga', () => {
@@ -26,17 +33,22 @@ describe('auth saga', () => {
       const clone = generator.clone();
       assert.deepEqual(
         clone.next(validAuth).value,
+        call(testStoreToken, validAuth),
+        "called storeTokenLocalStorage correctly"
+      );
+      
+      assert.deepEqual(
+        clone.next(validAuth).value,
         put({
           type: LOGIN_SUCCEEDED,
           payload: validAuth
         })
       );
 
-      assert.deepEqual(
-        clone.next(validAuth).value,
-        call(testStoreToken, validAuth),
-        "called storeTokenLocalStorage correctly"
-      );
+      // should be finished
+      assert.equal(clone.next().done, true);
+
+      // how do I test that the scheduleTokenRenew generator was started after the success was fired?
     });
 
     it('should fail for invalid user', () => {
@@ -52,16 +64,22 @@ describe('auth saga', () => {
   });
 
   describe('scheduleTokenRenew', () => {
-    const generator = scheduleTokenRenew();
-    it('should execute as expected ',  () => {
-      // calls select
-      assert.deepEqual(generator.next().value, select(getAuth));
-      
-      // calls delay
-      assert.deepEqual(generator.next(1000).value, call(delay, 1000));
+    const data = {
+      payload: {
+        expiresAt: 1000,
+        accessToken: 'token-goes-here',    
+        idToken: 'token-id',
+        scopes: 'scopes'
+      }
+    };
 
+    const generator = scheduleTokenRenew(data, processTokenRenew, storeTokenLocalStorage);
+    it('should execute as expected ',  () => {
+      // calls delay
+      assert.deepEqual(generator.next().value, call(delay, 10000));
+      
       // calls fork
-      assert.deepEqual(generator.next().value, fork(processTokenRenew));
+      assert.deepEqual(generator.next().value, fork(processTokenRenew, storeTokenLocalStorage));
 
     });
   });
@@ -92,6 +110,33 @@ describe('auth saga', () => {
         generator.next().value,
         call(testStoreToken, validAuth)
       );
+    });
+  });
+
+  describe('logout', () => {
+    xit('should clear localStorage', () => {
+      
+      const storageBuilder = () => {
+        return {
+          removeItem: function() {}
+        }
+      }
+
+      const storage = storageBuilder();
+      const generator = logoutUser(storage, 'auth');
+      
+      // call localStorage to clear data
+      const v = generator.next().value;
+      console.log('v: ', v);
+      const c =call([storage, 'removeItem'], 'auth');
+      console.log('c: ', c);
+      assert.equal(
+        v, //generator.next().value,
+        c, //call([storage, 'removeItem'], 'auth')
+      );
+
+      // call localStorage to clear data
+      assert.equal(generator.next().done, true);
     });
   });
   

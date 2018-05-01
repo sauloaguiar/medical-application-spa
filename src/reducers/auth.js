@@ -17,8 +17,8 @@ export default (state = initialState, action) => {
         ...state,
         accessToken: payload.accessToken,
         idToken: payload.idToken,
-        expiresAt: payload.expiresIn * 1000 + new Date().getTime(),
-        scopes: payload.scope || initialState.scopes
+        expiresAt: payload.expiresAt,
+        scopes: payload.scope
       };
 
     case LOGOUT:
