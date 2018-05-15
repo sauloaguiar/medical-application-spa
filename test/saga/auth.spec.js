@@ -114,7 +114,7 @@ describe('auth saga', () => {
   });
 
   describe('logout', () => {
-    xit('should clear localStorage', () => {
+    it('should clear localStorage', () => {
       
       const storageBuilder = () => {
         return {
@@ -124,15 +124,10 @@ describe('auth saga', () => {
 
       const storage = storageBuilder();
       const generator = logoutUser(storage, 'auth');
-      
-      // call localStorage to clear data
-      const v = generator.next().value;
-      console.log('v: ', v);
-      const c =call([storage, 'removeItem'], 'auth');
-      console.log('c: ', c);
-      assert.equal(
-        v, //generator.next().value,
-        c, //call([storage, 'removeItem'], 'auth')
+    
+      assert.deepEqual(
+        generator.next().value,
+        call([storage, 'removeItem'], 'auth')
       );
 
       // call localStorage to clear data

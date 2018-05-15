@@ -4,7 +4,9 @@ import {
   call,
   fork,
   put,
-  all
+  all,
+  take,
+  cancel
 } from 'redux-saga/effects';
 import { delay } from 'redux-saga';
 import {
@@ -46,13 +48,20 @@ function* checkAccessGranted() {
 }
 
 export function* scheduleTokenRenew(data) {
-  const { expiresAt } = data.payload;
-  const waitTime = 10000; //expiresAt - Date.now();
-  // console.log(delay);
-  // console.log('wait: ', waitTime);
-  if (waitTime > 0) {
-    yield call(delay, waitTime);
-    yield fork(processTokenRenew, storeTokenLocalStorage);
+  while (true) {
+    const { expiresAt } = data.payload;
+    const waitTime = 10000; //expiresAt - Date.now();
+    // console.log(delay);
+    // console.log('wait: ', waitTime);
+    // https://start.jcolemorrison.com/react-and-redux-sagas-authentication-app-tutorial-part-2/
+    let task;
+    if (waitTime > 0) {
+      yield call(delay, waitTime);
+      task = yield fork(processTokenRenew, storeTokenLocalStorage);
+    }
+    yield take(LOGOUT);
+    if (task) yield cancel(task);
+    yield call(logoutUser, window.localStorage, 'auth');
   }
 }
 
@@ -78,8 +87,6 @@ export function storeTokenLocalStorage(data) {
 }
 
 export function* logoutUser(localStorage, key) {
-  // do I need to release the delay call?
-
   // https://redux-saga.js.org/docs/api/#callcontext-fnname-args
   yield call([localStorage, 'removeItem'], key);
 }
@@ -101,10 +108,6 @@ function* watchLoginVerification() {
   );
 }
 
-function* watchLogout() {
-  yield takeLatest(LOGOUT, logoutUser, window.localStorage, 'auth');
-}
-
 export function* watchStartup() {
   yield takeLatest(START, checkAccessGranted);
 }
@@ -113,7 +116,6 @@ export default function* authSaga() {
   yield all([
     watchLoginRequest(),
     watchLoginVerification(),
-    watchLogout(),
     watchCredentialsGranted(),
     watchStartup()
   ]);
