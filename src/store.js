@@ -1,22 +1,21 @@
-import { createStore, applyMiddleware, compose } from 'redux'; 
-import { routerMiddleware } from 'react-router-redux';
+import { createStore, applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer from './reducers';
-import createHistory from 'history/createBrowserHistory'
+import logger from 'redux-logger';
 import thunk from 'redux-thunk';
+import createSagaMiddleware from 'redux-saga';
+import indexSaga from './saga/index';
 
-export const history = createHistory();
-const initialState = {};
-const middleware = [
-  thunk,
-  routerMiddleware(history)
-];
+// create the saga middleware
+const sagaMiddleware = createSagaMiddleware();
 
-const composedEnhancers = compose(applyMiddleware(...middleware));
+const middleware = [thunk, sagaMiddleware, logger];
 
-const store = createStore(
-  rootReducer,
-  initialState,
-  composedEnhancers
-);
+const composedEnhancers = composeWithDevTools(applyMiddleware(...middleware));
+
+const store = createStore(rootReducer, {}, composedEnhancers);
+
+// then run the saga
+sagaMiddleware.run(indexSaga);
 
 export default store;
