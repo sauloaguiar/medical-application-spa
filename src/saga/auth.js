@@ -50,9 +50,7 @@ function* checkAccessGranted() {
 export function* scheduleTokenRenew(data) {
   while (true) {
     const { expiresAt } = data.payload;
-    const waitTime = 10000; //expiresAt - Date.now();
-    // console.log(delay);
-    // console.log('wait: ', waitTime);
+    const waitTime = expiresAt - Date.now();
     // https://start.jcolemorrison.com/react-and-redux-sagas-authentication-app-tutorial-part-2/
     let task;
     if (waitTime > 0) {

@@ -8,7 +8,8 @@
     "chai": "^4.1.2",
     "mocha": "^5.0.1",
     "react-addons-test-utils": "^15.6.2",
-    "react-scripts": "1.0.13"
+    "react-scripts": "1.0.13",
+    "sinon": "^5.0.7"
   },
   "dependencies": {
     "auth0-js": "^8.12.1",

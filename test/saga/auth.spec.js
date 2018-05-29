@@ -13,6 +13,7 @@ import { assert } from 'chai';
 import { LOGIN_SUCCEEDED, LOGIN_FAILED } from '../../src/actions/auth';
 import { cloneableGenerator, fromGenerator } from 'redux-saga/utils';
 import { renewToken } from '../../src/service/oAuthService';
+import { useFakeTimers } from 'sinon';
 
 describe('auth saga', () => {
   describe('loginVerification()', () => {
@@ -67,20 +68,22 @@ describe('auth saga', () => {
     const data = {
       payload: {
         expiresAt: 1000,
-        accessToken: 'token-goes-here',    
+        accessToken: 'token-goes-here',  
         idToken: 'token-id',
         scopes: 'scopes'
       }
     };
 
-    const generator = scheduleTokenRenew(data, processTokenRenew, storeTokenLocalStorage);
     it('should execute as expected ',  () => {
+      const generator = scheduleTokenRenew(data, processTokenRenew, storeTokenLocalStorage);
+      const clock = useFakeTimers();
       // calls delay
-      assert.deepEqual(generator.next().value, call(delay, 10000));
+      assert.deepEqual(generator.next().value, call(delay, data.payload.expiresAt));
       
       // calls fork
       assert.deepEqual(generator.next().value, fork(processTokenRenew, storeTokenLocalStorage));
-
+      
+      clock.restore();
     });
   });
 
